@@ -4,48 +4,32 @@ import { DeleteBtn, List, Item, UserInfo, Avatar } from './ContactLIst.styled';
 import { HiOutlineTrash } from 'react-icons/hi';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteContact } from 'redux/contactSlise';
-import { getContacts, getFilter } from 'redux/contactSlise';
+import { deleteContact } from 'redux/operations';
+import { selectFilteredContacts } from 'redux/selectors';
 
 export default function ContactList() {
+  const contacts = useSelector(selectFilteredContacts);
+
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
-  const filtered = useSelector(getFilter);
-
-  const findContacts = () => {
-    const normalizedFilter = filtered.toLowerCase();
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
-
-  const filteredContacts = findContacts();
 
   return (
     <List>
-      {filteredContacts.map(
-        ({
-          id,
-          name,
-          phoneNumber,
-          img = 'https://cdn-icons-png.flaticon.com/512/2922/2922506.png',
-        }) => {
-          return (
-            <Item key={id}>
-              <Avatar src={img} alt="avatar" />
-              <UserInfo>
-                {name}: {phoneNumber}
-              </UserInfo>
-              <DeleteBtn
-                type="button"
-                onClick={() => dispatch(deleteContact(id))}
-              >
-                <HiOutlineTrash />
-              </DeleteBtn>
-            </Item>
-          );
-        }
-      )}
+      {contacts.map(({ id, name, pnonenumber: phonenumber, avatar }) => {
+        return (
+          <Item key={id}>
+            <Avatar src={avatar} alt="avatar" />
+            <UserInfo>
+              {name}: {phonenumber}
+            </UserInfo>
+            <DeleteBtn
+              type="button"
+              onClick={() => dispatch(deleteContact(id))}
+            >
+              <HiOutlineTrash size={20} />
+            </DeleteBtn>
+          </Item>
+        );
+      })}
     </List>
   );
 }

@@ -1,23 +1,19 @@
 import { nanoid } from 'nanoid';
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { HiUserAdd } from 'react-icons/hi';
 import { NameLabel, AddContactBtn, Input } from './Phonebook.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contactSlise';
-import { getContacts } from 'redux/contactSlise';
+import { addContact } from 'redux/operations';
+import { selectContacts } from 'redux/selectors';
 
 export default function Phonebook() {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  // const [img, setImg] = useState(
-  //   'https://cdn-icons-png.flaticon.com/512/2922/2922506.png'
-  // );
 
   const nameInputId = nanoid();
   const phoneNumberInputId = nanoid();
 
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
 
   const handleChange = event => {
@@ -59,7 +55,6 @@ export default function Phonebook() {
   const resetSubmit = () => {
     setName('');
     setPhoneNumber('');
-    // setImg('');
   };
   return (
     <div>
@@ -93,15 +88,9 @@ export default function Phonebook() {
           />
         </label>
         <AddContactBtn tupe="submit">
-          <HiUserAdd fill="#7f24a8" />
+          <HiUserAdd size={16} fill="#7f24a8" />
         </AddContactBtn>
       </form>
     </div>
   );
 }
-
-Phonebook.prototypes = {
-  name: PropTypes.string.isRequired,
-  phoneNumber: PropTypes.string.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-};
